@@ -13,7 +13,8 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     environment:
-      - OSU_API_PROXY_KEYS=${OSU_API_PROXY_KEYS}
+      - OSU_API_PROXY_SERVER_NAME=${OSU_API_PROXY_SERVER_NAME:?set OSU_API_PROXY_SERVER_NAME in the .env}
+      - OSU_API_PROXY_KEYS=${OSU_API_PROXY_KEYS:?set OSU_API_PROXY_KEYS in the .env}
 
 volumes:
   caddy_data:

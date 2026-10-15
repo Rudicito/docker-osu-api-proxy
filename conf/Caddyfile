@@ -1,4 +1,4 @@
-{$SERVER_NAME} {
+{$OSU_API_PROXY_SERVER_NAME} {
 
     handle / {
         respond 200
