@@ -1,0 +1,28 @@
+{$SERVER_NAME} {
+
+    handle / {
+        respond 200
+    }
+
+    @osu path /api/* /oauth/token
+
+    handle @osu {
+        map {http.request.header.X-Proxy-Secret} {key_ok} {
+            "~^({$PROXY_KEYS})$" 1
+            "" 0
+            default 0
+        }
+
+        @denied vars {key_ok} 0
+        respond @denied 403
+
+        reverse_proxy https://osu.ppy.sh {
+            header_up Host {upstream_hostport}
+            header_up -X-Proxy-Secret
+        }
+    }
+
+    handle {
+        respond 404
+    }
+}
