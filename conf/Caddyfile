@@ -5,20 +5,29 @@
     }
 
     @osu path /api/* /oauth/token
-
     handle @osu {
-        map {http.request.header.X-Proxy-Secret} {key_ok} {
-            "~^({$PROXY_KEYS})$" 1
-            "" 0
-            default 0
-        }
+        route {
+            map {http.request.header.X-Proxy-Secret} {key_ok} {
+                "~^({$OSU_API_PROXY_KEYS})$" 1
+                "" 0
+                default 0
+            }
 
-        @denied vars {key_ok} 0
-        respond @denied 403
+            @denied vars {key_ok} 0
+            respond @denied 403
 
-        reverse_proxy https://osu.ppy.sh {
-            header_up Host {upstream_hostport}
-            header_up -X-Proxy-Secret
+            rate_limit {
+                zone api {
+                    key static
+                    events 60
+                    window 1m
+                }
+            }
+
+            reverse_proxy https://osu.ppy.sh {
+                header_up Host {upstream_hostport}
+                header_up -X-Proxy-Secret
+            }
         }
     }
 

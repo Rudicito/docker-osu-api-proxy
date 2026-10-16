@@ -1,6 +1,7 @@
 services:
   caddy:
-    image: caddy:2-alpine
+    build: .
+    image: caddy-osu-api-proxy:local
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
