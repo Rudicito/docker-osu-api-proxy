@@ -1,3 +1,8 @@
+{
+    http_port 8080
+	https_port 8443
+}
+
 {$OSU_API_PROXY_SERVER_NAME} {
 
     handle / {
@@ -9,7 +14,6 @@
         route {
             map {http.request.header.X-Proxy-Secret} {key_ok} {
                 "~^({$OSU_API_PROXY_KEYS})$" 1
-                "" 0
                 default 0
             }
 

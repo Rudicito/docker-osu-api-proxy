@@ -1,8 +1,8 @@
-FROM caddy:2-alpine-builder AS builder
+FROM docker.io/library/caddy:2-builder AS builder
 
 RUN xcaddy build \
     --with github.com/mholt/caddy-ratelimit
 
-FROM caddy:2-alpine
+FROM docker.io/library/caddy:2
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy

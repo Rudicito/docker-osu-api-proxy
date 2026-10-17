@@ -3,19 +3,24 @@ services:
     build: .
     image: caddy-osu-api-proxy:local
     restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
+    user: "1000:1000"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs: /tmp
+    read_only: true
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "80:8080"
+      - "443:8443"
+      - "443:8443/udp"
     volumes:
-      - $PWD/conf:/etc/caddy
+      - ./conf:/etc/caddy:ro,Z
       - caddy_data:/data
       - caddy_config:/config
     environment:
       - OSU_API_PROXY_SERVER_NAME=${OSU_API_PROXY_SERVER_NAME:?set OSU_API_PROXY_SERVER_NAME in the .env}
-      - OSU_API_PROXY_KEYS=${OSU_API_PROXY_KEYS:?set OSU_API_PROXY_KEYS in the .env}
+      - OSU_API_PROXY_KEYS=${OSU_API_PROXY_KEYS:-.*}
 
 volumes:
   caddy_data:
