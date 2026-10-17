@@ -29,8 +29,10 @@
             }
 
             reverse_proxy https://osu.ppy.sh {
-                header_up Host {upstream_hostport}
                 header_up -X-Proxy-Secret
+                header_up -X-Forwarded-For
+                header_up -X-Forwarded-Proto
+                header_up -X-Forwarded-Host
             }
         }
     }

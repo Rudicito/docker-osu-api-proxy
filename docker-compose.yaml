@@ -1,11 +1,14 @@
 services:
   caddy:
     build: .
-    image: caddy-osu-api-proxy:local
+    image: localhost/caddy-osu-api-proxy:local
+    pull_policy: build
     restart: unless-stopped
     user: "1000:1000"
     cap_drop:
       - ALL
+    cap_add:
+      - NET_BIND_SERVICE
     security_opt:
       - no-new-privileges:true
     tmpfs: /tmp
